@@ -7,9 +7,9 @@ class EncodeString(object):
         listattrs = dir(self)
         result = ""
         for elem in listattrs:
-            if(elem.startswith('_') or elem.endswith('_')):
+            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
                 continue
-            result += elem + '=' +getattr(self, listattrs[0]) + ';'
+            result += elem + '=' +getattr(self, elem) + ';'
         return result
 
 

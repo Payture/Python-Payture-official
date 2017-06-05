@@ -131,8 +131,8 @@ class Router(object):
             card = self.getCard()
             self.response = self.Merchant.ewallet( PaytureCommands.Add ).expandForMerchantAdd(customer, card).processSync() 
         elif(cmd == 'FIELDS'):
-            #var aggrStr = allFields.Aggregate( $"\nCurrent value of fields:\n", ( a, c ) => a += $"\t{c.Key} = {c.Value}\n" );
-            #print( aggrStr );
+            for key, val in self.allFields:
+                print ('%s = %s' % (key, val))
             return
         elif(cmd == 'CHANGEFIELDS'):
             self.circleChanges("Change defaults")
@@ -179,7 +179,12 @@ class Router(object):
         paytureId = self.allFields[PaytureParams.PaytureId];
         custKey = self.allFields[PaytureParams.CustomerKey];
         custFields = self.allFields[PaytureParams.CustomFields];
-        propsPayInfo = ''#payInfo.GetType().GetProperties().Aggregate( $"PayInfo params:\n", ( a, c ) => a += $"\t{c.Name} = {c.GetValue( payInfo, null )}\n" )  CHANGE THIS!!
+        props = dir(payInfo)
+        propsPayInfo = '' 
+        for elem in props:
+            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+                continue
+            propsPayInfo += elem + '=' +getattr(payInfo, elem) + ';\n'
         print( "Additional settings for request:" )
         print( "%s\nPaytureId = %s\nCustomerKey = %s\nCustomFields = %s\n " % (propsPayInfo, paytureId, custKey, custFields) );
         self.circleChanges("Change defaults for pay/block")
@@ -208,9 +213,14 @@ class Router(object):
 
     def getCustomer(self):
         customer = self.customerFromCurrentSettings()
-        propsDataDefault = '' #customer.GetType().GetProperties().Aggregate( $"Data params:\n", ( a, c ) => a += $"\t{c.Name} = {c.GetValue( customer, null )}\n" ); CHANGE THIS!!
+        props = dir(customer)
+        propsDataDefault = '' 
+        for elem in props:
+            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+                continue
+            propsDataDefault += elem + '=' +getattr(customer, elem) + ';\n'
         print( "Default settings for Customer:" )
-        print('Oooops!')#"{propsDataDefault} " )
+        print( propsDataDefault )
         self.circleChanges( "Customers fields" )
         return self.customerFromCurrentSettings()
 
@@ -224,9 +234,14 @@ class Router(object):
         self.generateOrderId()
         self.allFields[ PaytureParams.SessionType ] = sessionType
         data = self.dataFromCurrentSettings()
-        propsDataDefault = '' #data.GetType().GetProperties().Aggregate( $"Data params:\n", ( a, c ) => a += $"\t{c.Name} = {c.GetValue( data, null )}\n" ); CHANGE THIS!
+        props = dir(data)
+        propsDataDefault = '' 
+        for elem in props:
+            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+                continue
+            propsDataDefault += elem + '=' +getattr(data, elem) + ';\n'
         print( "Default settings for request:" )
-        print('Oooops!!')# $@"{propsDataDefault} " );
+        print( propsDataDefault )
         self.circleChanges("Change Data settings")
         return self.dataFromCurrentSettings()
 
@@ -244,9 +259,14 @@ class Router(object):
 
     def getCard(self):
         card = self.cardFromCurrentSettings()
-        propsDataDefault = '' #card.GetType().GetProperties().Aggregate( $"Data params:\n", ( a, c ) => a += $"\t{c.Name} = {c.GetValue( card, null )}\n" ) CHANGE THIS
+        props = dir(card)
+        propsDataDefault = '' 
+        for elem in props:
+            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+                continue
+            propsDataDefault += elem + '=' +getattr(card, elem) + ';\n'
         print( "Default settings for Card:" )
-        print( 'Opps!' ) #$@"{propsDataDefault} " );
+        print( propsDataDefault )
         self.circleChanges("Change Card's settings")
         return self.cardFromCurrentSettings()
 
@@ -257,10 +277,15 @@ class Router(object):
     def getPayInfo(self):
         self.generateAmount();
         self.generateOrderId();
-        payInfo = self.payInfoFromCurrentSettings();
-        propsPayInfo = '' #payInfo.GetType().GetProperties().Aggregate( $"PayInfo params:\n", ( a, c ) => a += $"\t{c.Name} = {c.GetValue( payInfo, null )}\n" ); CHANGE THIS!!
+        payInfo = self.payInfoFromCurrentSettings()
+        props = dir(payInfo)
+        propsPayInfo = '' 
+        for elem in props:
+            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+                continue
+            propsPayInfo += elem + '=' +getattr(payInfo, elem) + ';\n'
         print( "Default settings PayInfo:" )
-        print( 'Oops!' )# $@"{propsPayInfo}\n" )
+        print( propsPayInfo )
         self.circleChanges("Change PayInfo")
         return self.payInfoFromCurrentSettings()
 
