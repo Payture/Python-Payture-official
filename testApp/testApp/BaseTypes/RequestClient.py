@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from PaytureResponse import *
+from Constants import *
 import requests
 
 class RequestClient(object):
@@ -16,8 +17,7 @@ class RequestClient(object):
         r = requests.post(url, content)
         cont = r.content
         print( "Response:\n" + r.text )
-        self.parseXMLResponse(r.text)
-        return r
+        return self.parseXMLResponse(r.text)
 
 
 	# <summary>
@@ -33,12 +33,12 @@ class RequestClient(object):
         for child in root:
             print(child.tag, child.attrib)
         print ('===================================\n\n\n')
-        apiname = ''
-        err = ''
-        success = True
+        apiname = root.tag
+        err = True  #root.attrib['ErrCode']
+        success = root.attrib['Success']
         red = None
         if(apiname == 'Init'):
-            red = ''
+            red = '%s/%s/%s?%s=%s' % (self._merchant.HOST, self._apiType, self._sessionType, PaytureParams.SessionId, root.attrib[PaytureParams.SessionId] )
         paytureResponse = PaytureResponse(apiname, success, err, RedirectURL = red )
         return paytureResponse
 

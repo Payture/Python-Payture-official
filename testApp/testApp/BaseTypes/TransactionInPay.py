@@ -15,7 +15,7 @@ class TransactionInPay(Transaction):
 		if ( data == None ):
 			return self
 		self._sessionType = SessionType.Pay
-		self._requestKeyValuePair[PaytureParams.Data]  = data.detPropertiesString
+		self._requestKeyValuePair[PaytureParams.Data]  = data.getPropertiesString()
 		self.expandMerchant()
 		self._expanded = True
 		return self

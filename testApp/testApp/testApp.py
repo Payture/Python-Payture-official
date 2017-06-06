@@ -22,23 +22,24 @@ _merchantPassword = "789555";
 
 
 merchant = Merchant(_merchantKey, _merchantPassword, _host)
+rout = Router(merchant)
 
 str = input( "Press space for get description of commands for this console program. " )
 if(str == ' '):
-	help()
+	rout.help()
 	str = input( "Press space for get command's list. " )
 	if(str == ' '):
-		listCommands()
+		rout.listCommands()
 		str = input( "Press enter for continue. " )
 
 print ( "Merchant account settings: \n\tMerchantName=%s\n\tMerchantPassword=%s\n\tHOST=%s\n" % (_merchantKey, _merchantPassword, _host) );
 str = input( "Press space for change Merchant account settings. " )
 if(str == ' '):
-	changeMerchant()
+	rout.changeMerchant()
+
 
 while(True):
-    rout = Router(merchant)
-    str = input( "Type 'end' for exit: " )
+    str = input( "Type 'end' for exit: ")
     if(str == 'end'):
         break
     rout.router()

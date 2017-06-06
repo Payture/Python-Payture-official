@@ -71,11 +71,11 @@ class TransactionEWallet(Transaction):
     # <param name="data">Data object. SessionType and IP fields are required; Optional TamplateTag and Language.</param>
     # <returns>current expanded transaction</returns>
 	def expandInit(self, customer, cardId, data):
-		if(custoner == None or data == None):
+		if(customer == None or data == None):
 			return self
 		self._sessionType = data.SessionType
-		str = customer.getPropertiesString() + ( '' if cardId == None else 'CardId=%s;' %(cardId) ) + data.getPropertiesString() + data.CustomFields;
-		return expandInternal(PaytureParams.DATA, str)
+		str = customer.getPropertiesString() + ( '' if cardId == None else 'CardId=%s;' %(cardId) ) + data.getPropertiesString() + ( data.CustomFields if hasattr(data, 'CustomFields') else '');
+		return self.expandInternal(PaytureParams.DATA, str)
 
 
 
