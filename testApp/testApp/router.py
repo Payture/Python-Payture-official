@@ -131,8 +131,8 @@ class Router(object):
             card = self.getCard()
             self.response = self.Merchant.ewallet( PaytureCommands.Add ).expandForMerchantAdd(customer, card).processSync() 
         elif(cmd == 'FIELDS'):
-            for key, val in self.allFields:
-                print ('%s = %s' % (key, val))
+            for key in self.allFields:
+                print ('%s = %s' % (key, self.allFields[key]))
             return
         elif(cmd == 'CHANGEFIELDS'):
             self.circleChanges("Change defaults")
@@ -247,11 +247,10 @@ class Router(object):
 
     def dataFromCurrentSettings(self):
         self.allFields[ PaytureParams.Total ] = self.allFields[ PaytureParams.Amount ]
-        return  Data(Amount = self.allFields[ PaytureParams.Amount ],
-                    IP = self.allFields[ PaytureParams.IP ],
+        return  Data(self.allFields[ PaytureParams.SessionType ],self.allFields[ PaytureParams.IP ], 
+                    Amount = self.allFields[ PaytureParams.Amount ],
                     Language = self.allFields[ PaytureParams.Language ],
                     OrderId = self.allFields[ PaytureParams.OrderId ],
-                    SessionType = self.allFields[ PaytureParams.SessionType ],
                     TemplateTag = self.allFields[ PaytureParams.TemplateTag ],
                     Total = self.allFields[ PaytureParams.Amount ],
                     Product = self.allFields[ PaytureParams.Product ])
@@ -333,9 +332,18 @@ class Router(object):
 
 
     def changeFields(self):
-        line = input("Enter your params in line separated by space, like this: key1=val1 key2=val2")
+        line = input("Enter your params in line separated by space (like this key1=val1 key2=val2): ")
         if ( line == '' ):
             return
+        pairs = line.split()
+        for pair in pairs:
+            keyval = pair.split('=')
+            for key in self.allFields:
+                if(key.upper() == keyval[0].upper()):
+                    self.allFields[key] = keyval[1]
+
+        for key in self.allFields:
+            print (key + '=' + self.allFields[key])
         #splitedLine = line.Split( ' ' ).Select(n=> {             CHANGE THIS!!!
         #    if ( !n.Contains( "=" ) )
         #        return new KeyValuePair<PaytureParams, dynamic>(PaytureParams.Unknown, null);
