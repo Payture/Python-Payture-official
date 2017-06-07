@@ -1,9 +1,9 @@
-from Transaction import *
+import transaction
 
-class TransactionEWallet(Transaction):
+class TransactionEWallet(transaction.Transaction):
     """Transaction class for PaytureEWallet"""
     def __init__(self, command, merchant):
-        return super().__init__(PaytureAPIType.vwapi, command, merchant)
+         super().__init__(PaytureAPIType.vwapi, command, merchant)
     
     def expandForMerchantAdd(self, customer, card):
         """Expand transaction for EWallet Methods: Add (on Merchant side)
@@ -126,7 +126,7 @@ class TransactionEWallet(Transaction):
         if(sessionId == None):
             return self
         self._requestKeyValuePair[PaytureParams.SessionId] =  sessionId 
-        self._expanded = True;
+        self._expanded = True
         return self
     
     def expandPaySubmit3DS(self, md, pares):
@@ -142,7 +142,7 @@ class TransactionEWallet(Transaction):
         """
         self._requestKeyValuePair[PaytureParams.MD] = md
         self._requestKeyValuePair[PaytureParams.PaRes] = pares
-        self._expanded = True;
+        self._expanded = True
         return self
     
     def expandInternal(self, field, data):

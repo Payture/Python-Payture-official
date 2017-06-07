@@ -1,4 +1,4 @@
-from Transaction import *
+from transaction import *
 from collections import *
 
 class TransactionAPI(Transaction):
@@ -53,5 +53,4 @@ class TransactionAPI(Transaction):
         self.expandMerchant()
         self._expanded = True
         return self
-
 

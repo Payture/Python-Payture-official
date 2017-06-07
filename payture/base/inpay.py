@@ -1,5 +1,5 @@
-from Transaction import *
-from Constants import *
+from transaction import *
+from constants import *
 
 class TransactionInPay(Transaction):
     """Transaction class for PaytureInPay"""

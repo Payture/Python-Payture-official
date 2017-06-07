@@ -17,7 +17,5 @@ class PaytureResponse(object):
 				self.ResponseBodyXML = value
 
 	def errorResponse(command, error):
-		self.APIName = command
-		self.Success = false
-		self.ErrCode = error
+        return PaytureResponse(command, False, error)
 
