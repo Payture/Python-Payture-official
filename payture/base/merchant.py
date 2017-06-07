@@ -1,8 +1,8 @@
-from TransactionAPI import *
-from TransactionDigitalWallet import *
-from TransactionEWallet import *
-from TransactionInPay import *
-from Constants import *
+from api import *
+from digitalwallet import *
+from ewallet import *
+from inpay import *
+from constants import *
 
 class Merchant(object):
     """Object that contain Merchant account data (login and password) and string value of HOST for requests"""

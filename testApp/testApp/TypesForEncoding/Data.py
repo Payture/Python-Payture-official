@@ -1,21 +1,6 @@
 from EncodeString import *
 
 class Data(EncodeString):
-
-    def __init__(self, sessionType, orderId, amount, ip,  product,  total, url, template, lang, confirmCode,  customFields ):
-        self.SessionType = sessionType
-        self.IP = ip
-        self.OrderId = orderId
-        self.Amount = amount
-        self.Language = lang
-        self.TemplateTag = template
-        self.Url = url
-        self.Product = product
-        self.Total = total
-        self.ConfirmCode = confirmCode
-        self.customFields = customFields
-
-
     def __init__(self, sessionType, ip,  **kwargs):
         self.SessionType = sessionType
         self.IP = ip

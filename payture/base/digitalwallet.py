@@ -1,10 +1,11 @@
-from Transaction import *
+from transaction import *
+from constants import *
 
 class TransactionDigitalWallet(Transaction):
     """Transaction class for Payture ApplePay and Payture AndroidPay"""
     
-    def __init__(self, command, merchant, specialCmd):
-        self._specialCommand = specialCmd
+    def __init__(self, command, merchant, specialcmd):
+        self._specialCommand = specialcmd
         super().__init__(PaytureAPIType.api, command, merchant)
     
     def expandPayBlock(self, payToken, orderId, amount):
