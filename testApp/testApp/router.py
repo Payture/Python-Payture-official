@@ -246,13 +246,13 @@ class Router(object):
         return self.dataFromCurrentSettings()
 
     def dataFromCurrentSettings(self):
-        self.allFields[ PaytureParams.Total ] = self.allFields[ PaytureParams.Amount ]
+        #self.allFields[ PaytureParams.Total ] = self.allFields[ PaytureParams.Amount ]
         return  Data(self.allFields[ PaytureParams.SessionType ],self.allFields[ PaytureParams.IP ], 
                     Amount = self.allFields[ PaytureParams.Amount ],
                     Language = self.allFields[ PaytureParams.Language ],
                     OrderId = self.allFields[ PaytureParams.OrderId ],
                     TemplateTag = self.allFields[ PaytureParams.TemplateTag ],
-                    Total = self.allFields[ PaytureParams.Amount ],
+                    Total = self.allFields[ PaytureParams.Total ],
                     Product = self.allFields[ PaytureParams.Product ])
 
 
@@ -309,9 +309,6 @@ class Router(object):
         else:
             self.response = self.Merchant.inpay( PaytureCommands.Init ).expandInit( data ).processSync()
         webbrowser.open(self.response.RedirectURL)
-        #logic for open browser is needed
-        #var res = response;
-        #Task.Run(() => Process.Start($"{res.RedirectURL}"));
 
     def customerAndCardApi(self, command):
         customer = self.getCustomer()
@@ -344,19 +341,6 @@ class Router(object):
 
         for key in self.allFields:
             print (key + '=' + self.allFields[key])
-        #splitedLine = line.Split( ' ' ).Select(n=> {             CHANGE THIS!!!
-        #    if ( !n.Contains( "=" ) )
-        #        return new KeyValuePair<PaytureParams, dynamic>(PaytureParams.Unknown, null);
-        #    var temp = n.Split( '=' );
-        #    PaytureParams paytureParam = PaytureParams.Unknown;
-        #    if ( !Enum.TryParse( temp[ 0 ], true, out paytureParam ) )
-        #        return new KeyValuePair<PaytureParams, dynamic>(PaytureParams.Unknown, null);
-        #    return new KeyValuePair<PaytureParams, dynamic>( paytureParam, temp[ 1 ] );
-        #} );
-        #
-        #foreach(var keyVal in splitedLine)
-        #    if(allFields.ContainsKey(keyVal.Key))
-        #        allFields[ keyVal.Key ] = keyVal.Value;
 
 
     def listCommands(self):

@@ -1,8 +1,8 @@
-from api import *
-from digitalwallet import *
-from ewallet import *
-from inpay import *
-from constants import *
+from . import api
+from . import digitalwallet
+from . import ewallet
+from . import inpay
+from . import constants
 
 class Merchant(object):
     """Object that contain Merchant account data (login and password) and string value of HOST for requests"""
@@ -14,20 +14,20 @@ class Merchant(object):
 
     def api(self, command):
         """Create an empty transation for PaytureAPI."""
-        return TransactionAPI(command, self)
+        return api.TransactionAPI(command, self)
     
     def inpay(self, command):
         """Create an empty transation for PaytureInPay."""
-        return TransactionInPay(command, self)
+        return inpay.TransactionInPay(command, self)
     
     def ewallet(self, command):
         """Create an empty transation for PaytureEWallet."""
-        return TransactionEWallet(command, self)
+        return ewallet.TransactionEWallet(command, self)
     
     def apple(self, command):
         """Create an empty transation for Payture Apple Pay."""
-        return TransactionDigitalWallet(command, self, PaytureCommands.ApplePay)
+        return digitalwallet.TransactionDigitalWallet(command, self, constants.PaytureCommands.ApplePay)
     
     def android(self, command):
         """Create an empty transation for Payture Android Pay."""
-        return TransactionDigitalWallet(command, self, PaytureCommands.AndroidPay)
+        return digitalwallet.TransactionDigitalWallet(command, self, constants.PaytureCommands.AndroidPay)

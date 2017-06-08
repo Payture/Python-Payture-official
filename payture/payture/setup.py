@@ -13,7 +13,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='payture',
-    version='0.0.3',
+    version='0.0.13',
 
     description='Official Payture API',
     #long_description=long_description,
@@ -44,7 +44,7 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=['payture'], #find_packages(exclude=['contrib', 'docs', 'tests']),
-    package_dir={'payture': 'base'},
+    package_dir={'payture': 'payturetypes'},
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['requests'],

@@ -1,9 +1,10 @@
-import transaction
+from . import transaction
+from . import constants
 
 class TransactionEWallet(transaction.Transaction):
     """Transaction class for PaytureEWallet"""
     def __init__(self, command, merchant):
-         super().__init__(PaytureAPIType.vwapi, command, merchant)
+         super().__init__(constants.PaytureAPIType.vwapi, command, merchant)
     
     def expandForMerchantAdd(self, customer, card):
         """Expand transaction for EWallet Methods: Add (on Merchant side)
@@ -19,7 +20,7 @@ class TransactionEWallet(transaction.Transaction):
         if(customer == None or card == None):
             return self
         str = customer.getPropertiesString() + card.getPropertiesString()
-        return self.expandInternal(PaytureParams.DATA, str)
+        return self.expandInternal(constants.PaytureParams.DATA, str)
     
     def expandForMerchantPayNoReg(self, customer, card, data):
         """Expand transaction for EWallet Methods: Pay (Merchant side for NOT REGISTERED card)
@@ -38,7 +39,7 @@ class TransactionEWallet(transaction.Transaction):
         self._sessionType = data.SessionType
         card.CardId = 'FreePay'
         str = customer.getPropertiesString() + card.getPropertiesString() + data.getPropertiesString() + data.CustomFields
-        return self.expandInternal(PaytureParams.DATA, str)
+        return self.expandInternal(constants.PaytureParams.DATA, str)
     
     def expandForMerchantPayReg(self, customer, cardId, secureCode, data):
         """Expand transaction for EWallet Methods: Pay (Merchant side for REGISTERED card) 
@@ -57,7 +58,7 @@ class TransactionEWallet(transaction.Transaction):
             return self
         self._sessionType = data.SesstionType
         str = customer.getPropertiesString() + '%s=%s;' % (PaytureParams.CardId, cardId) + '%s=%s;' % (PaytureParams.SecureCode, secureCode) +  data.getPropertiesString()  + data.CustomFields;
-        return self.expandInternal(PaytureParams.DATA, str)
+        return self.expandInternal(constants.PaytureParams.DATA, str)
     
     def expandCustomer(self, customer):
         """Expand transaction for EWallet Methods: Register/Update/Delete/Check/Getlist 
@@ -70,11 +71,11 @@ class TransactionEWallet(transaction.Transaction):
 
         """
         str = ''
-        if(self.Command == PaytureCommands.Delete):
-            str +=  '%s=%s;%s=%s;' % (PaytureParams.VWUserLgn, customer.VWUserLgn, PaytureParams.Password, self._merchant.Password)
+        if(self.Command == constants.PaytureCommands.Delete):
+            str +=  '%s=%s;%s=%s;' % (constants.PaytureParams.VWUserLgn, customer.VWUserLgn, constants.PaytureParams.Password, self._merchant.Password)
         else:
             str += customer.getPropertiesString()
-        return self.expandInternal(PaytureParams.DATA, str)
+        return self.expandInternal(constants.PaytureParams.DATA, str)
     
     def expandInit(self, customer, cardId, data):
         """Expand transaction for EWallet Methods: Init
@@ -93,7 +94,7 @@ class TransactionEWallet(transaction.Transaction):
             return self
         self._sessionType = data.SessionType
         str = customer.getPropertiesString() + ( '' if cardId == None else 'CardId=%s;' %(cardId) ) + data.getPropertiesString() + ( data.CustomFields if hasattr(data, 'CustomFields') else '');
-        return self.expandInternal(PaytureParams.DATA, str)
+        return self.expandInternal(constants.PaytureParams.DATA, str)
     
     def expandForCardOperation(self, customer, cardId, amount, orderId = None):
         """Expand transaction for EWallet Methods: SendCode/Activate/Remove
@@ -110,8 +111,8 @@ class TransactionEWallet(transaction.Transaction):
         """
         if(customer == None or cardId == None):
             return self
-        str = customer.getPropertiesString() + '%s=%s;' %(PaytureParams.CardId, cardId) + ( '%s=%s;' % (PaytureParams.Amount, amount) if amount != None and self.Command == PaytureCommands.Activate else '' ) + ( '' if orderId == None else '%s=%s;'%(PaytureParams.OrderId, orderId) )
-        return self.expandInternal(PaytureParams.DATA, str)
+        str = customer.getPropertiesString() + '%s=%s;' %(constants.PaytureParams.CardId, cardId) + ( '%s=%s;' % (constants.PaytureParams.Amount, amount) if amount != None and self.Command == constants.PaytureCommands.Activate else '' ) + ( '' if orderId == None else '%s=%s;'%(constants.PaytureParams.OrderId, orderId) )
+        return self.expandInternal(constants.PaytureParams.DATA, str)
     
     def expandSessionId(self, sessionId):
         """Expand transaction for EWallet  Methods: Pay/Add (on Payture side)
@@ -125,7 +126,7 @@ class TransactionEWallet(transaction.Transaction):
         """
         if(sessionId == None):
             return self
-        self._requestKeyValuePair[PaytureParams.SessionId] =  sessionId 
+        self._requestKeyValuePair[constants.PaytureParams.SessionId] =  sessionId 
         self._expanded = True
         return self
     
@@ -140,8 +141,8 @@ class TransactionEWallet(transaction.Transaction):
         Returns current expanded transaction
 
         """
-        self._requestKeyValuePair[PaytureParams.MD] = md
-        self._requestKeyValuePair[PaytureParams.PaRes] = pares
+        self._requestKeyValuePair[constants.PaytureParams.MD] = md
+        self._requestKeyValuePair[constants.PaytureParams.PaRes] = pares
         self._expanded = True
         return self
     

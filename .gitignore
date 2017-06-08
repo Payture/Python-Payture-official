@@ -2,6 +2,7 @@
 /testApp/testApp/BaseTypes/__pycache__
 /testApp/testApp/TypesForEncoding/__pycache__
 /testApp/.vs
-/payture/build
-/payture/dist
-/payture/payture.egg-info
+/payture/payture/build
+/payture/payture/dist
+/payture/payture/payture.egg-info
+/payture/.vs
