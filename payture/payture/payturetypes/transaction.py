@@ -1,8 +1,7 @@
-import xml.etree.ElementTree as ET
-from paytureresponse import *
-from constants import *
+from . import constants
 import requests
-import string
+import xml.etree.ElementTree as ET
+from . import paytureresponse as pr
 
 class RequestClient(object):
     """Base class for posting request to Payture server"""
@@ -43,8 +42,8 @@ class RequestClient(object):
         success = root.attrib['Success']
         red = None
         if(apiname == 'Init'):
-            red = '%s/%s/%s?%s=%s' % (self._merchant.HOST, self._apiType, self._sessionType, PaytureParams.SessionId, root.attrib[PaytureParams.SessionId] )
-        paytureResponse = PaytureResponse(apiname, success, err, RedirectURL = red )
+            red = '%s/%s/%s?%s=%s' % (self._merchant.HOST, self._apiType, self._sessionType, constants.PaytureParams.SessionId, root.attrib[constants.PaytureParams.SessionId] )
+        paytureResponse = pr.PaytureResponse(apiname, success, err, RedirectURL = red )
         return paytureResponse
 
 
@@ -53,7 +52,7 @@ class Transaction(RequestClient):
 
     def __init__(self, api, command, merchant):
         self._apiType = api
-        self._sessionType = SessionType.Unknown
+        self._sessionType = constants.SessionType.Unknown
         self._merchant = merchant
         self._expanded = False
         self.Command = command
@@ -78,21 +77,21 @@ class Transaction(RequestClient):
         if(orderId == ''):
             return self
 
-        if(self._apiType == PaytureAPIType.vwapi):
-            if(self.Command == PaytureCommands.PayStatus):
-                self._requestKeyValuePair[PaytureParams.DATA] = '%s=%s;'%(PaytureParams.OrderId, orderId)
-            elif(self.Command == PaytureCommands.Refund and amount != None):
-                self._requestKeyValuePair[PaytureParams.DATA] = '%s=%s;%s=%s;%s=%s;'%(PaytureParams.OrderId, orderId, PaytureParams.Amount, amount, PaytureParams.Password, self._merchant.Password)
+        if(self._apiType == constants.PaytureAPIType.vwapi):
+            if(self.Command == constants.PaytureCommands.PayStatus):
+                self._requestKeyValuePair[constants.PaytureParams.DATA] = '%s=%s;'%(constants.PaytureParams.OrderId, orderId)
+            elif(self.Command == constants.PaytureCommands.Refund and amount != None):
+                self._requestKeyValuePair[constants.PaytureParams.DATA] = '%s=%s;%s=%s;%s=%s;'%(constants.PaytureParams.OrderId, orderId, constants.PaytureParams.Amount, amount, constants.PaytureParams.Password, self._merchant.Password)
             elif(amount != None):
-                self._requestKeyValuePair[PaytureParams.Amount] = amount
+                self._requestKeyValuePair[constants.PaytureParams.Amount] = amount
             else:
-                self._requestKeyValuePair[PaytureParams.OrderId] = orderId
+                self._requestKeyValuePair[constants.PaytureParams.OrderId] = orderId
         else:
-            self._requestKeyValuePair[PaytureParams.OrderId] = orderId
+            self._requestKeyValuePair[constants.PaytureParams.OrderId] = orderId
             if(amount != None):
-                self._requestKeyValuePair[PaytureParams.Amount] = amount
+                self._requestKeyValuePair[constants.PaytureParams.Amount] = amount
 
-        if(self.Command == PaytureCommands.Refund or (self._apiType != PaytureAPIType.api and (self.Command == PaytureCommands.Charge or self.Command == PaytureCommands.Unblock))):
+        if(self.Command == constants.PaytureCommands.Refund or (self._apiType != constants.PaytureAPIType.api and (self.Command == constants.PaytureCommands.Charge or self.Command == constants.PaytureCommands.Unblock))):
             self.expandMerchant(True, True)
         else:
             self.expandMerchant()
@@ -112,9 +111,9 @@ class Transaction(RequestClient):
 
         """
         if(addKey):
-            self._requestKeyValuePair[(PaytureParams.VWID if self._apiType == PaytureAPIType.vwapi else  PaytureParams.Key)] = self._merchant.MerchantName
+            self._requestKeyValuePair[(constants.PaytureParams.VWID if self._apiType == constants.PaytureAPIType.vwapi else  constants.PaytureParams.Key)] = self._merchant.MerchantName
         if(addPass):
-            self._requestKeyValuePair[PaytureParams.Password] = self._merchant.Password
+            self._requestKeyValuePair[constants.PaytureParams.Password] = self._merchant.Password
         return self
 
 
@@ -140,8 +139,8 @@ class Transaction(RequestClient):
     
     def formRedirectURL(self, response):
         """  Helper method for PaytureCommand.Init for form Redirect URL and save it in RedirectURL field for convinience"""
-        sessionId = response.Attribute[PaytureParams.SessionId]
-        response.RedirectURL = '%S/%s/%s?SessionId=%s' % (self._merchant.HOST, self._apiType, PaytureCommands.Add if _sessionType == SessionType.Add else PaytureCommands.Pay, sessionId)
+        sessionId = response.Attribute[constants.PaytureParams.SessionId]
+        response.RedirectURL = '%S/%s/%s?SessionId=%s' % (self._merchant.HOST, self._apiType, constants.PaytureCommands.Add if _sessionType == constants.SessionType.Add else constants.PaytureCommands.Pay, sessionId)
         return response
 
 

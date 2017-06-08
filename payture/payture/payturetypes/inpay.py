@@ -1,10 +1,10 @@
-from transaction import *
-from constants import *
+from . import transaction
+from . import constants
 
-class TransactionInPay(Transaction):
+class TransactionInPay(transaction.Transaction):
     """Transaction class for PaytureInPay"""
     def __init__(self, command, merchant):
-        return super().__init__(PaytureAPIType.apim, command, merchant)
+        return super().__init__(constants.PaytureAPIType.apim, command, merchant)
     
     def expandInit(self, data):
         """Expand transaction for EWallet Methods: Init
@@ -19,7 +19,7 @@ class TransactionInPay(Transaction):
         if ( data == None ):
             return self
         self._sessionType = SessionType.Pay
-        self._requestKeyValuePair[PaytureParams.Data]  = data.getPropertiesString()
+        self._requestKeyValuePair[constants.PaytureParams.Data]  = data.getPropertiesString()
         self.expandMerchant()
         self._expanded = True
         return self
@@ -36,7 +36,7 @@ class TransactionInPay(Transaction):
         """
         if (sessionId == None):
             return self
-        self._requestKeyValuePair[PaytureParams.SessionId] =  sessionId
+        self._requestKeyValuePair[constants.PaytureParams.SessionId] =  sessionId
         self._expanded = True
         return self
 
