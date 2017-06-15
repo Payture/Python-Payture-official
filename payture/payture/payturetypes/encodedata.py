@@ -1,3 +1,5 @@
+import string
+
 class EncodeString(object):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -8,7 +10,7 @@ class EncodeString(object):
         for elem in listattrs:
             if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
                 continue
-            result += elem + '=' +getattr(self, elem) + ';'
+            result += elem + '=' + str(getattr(self, elem)) + ';'
         return result
 
 

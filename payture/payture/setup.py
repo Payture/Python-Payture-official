@@ -13,7 +13,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='payture',
-    version='0.0.14',
+    version='0.0.15',
 
     description='Official Payture API',
     #long_description=long_description,
