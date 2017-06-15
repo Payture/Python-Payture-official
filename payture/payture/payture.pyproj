@@ -5,8 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e896c0f2-0653-4e9d-9bd9-254878a2f4f2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>setup.py</StartupFile>
-    <SearchPath>payturetypes\</SearchPath>
+    <StartupFile>testapp\starttest.py</StartupFile>
+    <SearchPath>payturetypes\;testapp\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>payture</Name>
@@ -21,6 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="testapp\" />
     <Folder Include="payturetypes\" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +37,12 @@
     <Compile Include="payturetypes\transaction.py" />
     <Compile Include="payturetypes\__init__.py" />
     <Compile Include="setup.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testapp\router.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testapp\starttest.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

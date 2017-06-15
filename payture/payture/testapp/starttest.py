@@ -1,19 +1,5 @@
-from CardInfo import *
-from Constants import *
-from Merchant import *
-from PaytureResponse import *
-from RequestClient import *
-from Transaction import *
-from TransactionAPI import *
-from TransactionEWallet import *
-from TransactionInPay import *
-from TransactionDigitalWallet import *
-from Card import *
-from Customer import *
-from Data import *
-from EncodeString import *
-from PayInfo import *
 import string
+import payture
 from router import *
 
 _host = "http://sasha:7080";
@@ -21,7 +7,7 @@ _merchantKey = "elena_Test";
 _merchantPassword = "789555";
 
 
-merchant = Merchant(_merchantKey, _merchantPassword, _host)
+merchant = payture.Merchant(_merchantKey, _merchantPassword, _host)
 rout = Router(merchant)
 
 str = input( "Press space for get description of commands for this console program. " )
@@ -42,4 +28,9 @@ while(True):
     str = input( "Type 'end' for exit: ")
     if(str == 'end'):
         break
-    rout.router()
+    try:
+        rout.router()
+    except:
+        print ("Unexpected error:", sys.exc_info()[0])
+        str = input("Press Enter for closing app.")
+        break;

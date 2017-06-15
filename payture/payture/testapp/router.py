@@ -1,11 +1,7 @@
 import random
+import sys
 import webbrowser
-from Constants import *
-from Merchant import *
-from PayInfo import *
-from Card import *
-from Customer import *
-from Data import *
+from payture import *
 
 class Router(object):
     def __init__(self, merchant):
@@ -101,13 +97,13 @@ class Router(object):
         elif(cmd == 'CHARGE'):
             self.chargeUnblockRefundGetState(PaytureCommands.Charge)
         elif(cmd == 'REFUND'):
-            self.chargeUnblockRefundGetState(PaytureCommands.Charge)
+            self.chargeUnblockRefundGetState(PaytureCommands.Refund)
         elif(cmd == 'UNBLOCK'):
-            self.chargeUnblockRefundGetState(PaytureCommands.Charge)
+            self.chargeUnblockRefundGetState(PaytureCommands.Unblock)
         elif(cmd == 'GETSTATE'):
-            self.chargeUnblockRefundGetState(PaytureCommands.Charge)
+            self.chargeUnblockRefundGetState(PaytureCommands.GetState)
         elif(cmd == 'PAYSTATUS'):
-            self.chargeUnblockRefundGetState(PaytureCommands.Charge)
+            self.chargeUnblockRefundGetState(PaytureCommands.PayStatus)
         elif(cmd == 'ACTIVATE'):
             self.customerAndCardApi(PaytureCommands.Activate)
         elif(cmd == 'REMOVE'):
@@ -176,17 +172,17 @@ class Router(object):
 
     def apiPayOrBlock(self, command):
         payInfo = self.getPayInfo();
-        paytureId = self.allFields[PaytureParams.PaytureId];
-        custKey = self.allFields[PaytureParams.CustomerKey];
-        custFields = self.allFields[PaytureParams.CustomFields];
+        paytureId = self.allFields[PaytureParams.PaytureId]
+        custKey = self.allFields[PaytureParams.CustomerKey]
+        custFields = self.allFields[PaytureParams.CustomFields]
         props = dir(payInfo)
         propsPayInfo = '' 
         for elem in props:
             if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
                 continue
-            propsPayInfo += elem + '=' +getattr(payInfo, elem) + ';\n'
+            propsPayInfo += elem + '=' + getattr(payInfo, elem) + ';\n'
         print( "Additional settings for request:" )
-        print( "%s\nPaytureId = %s\nCustomerKey = %s\nCustomFields = %s\n " % (propsPayInfo, paytureId, custKey, custFields) );
+        print( "%s\nPaytureId = %s\nCustomerKey = %s\nCustomFields = %s\n " % (propsPayInfo, paytureId, custKey, custFields) )
         self.circleChanges("Change defaults for pay/block")
         self.response = self.Merchant.api(command).expandPayBlock( payInfo, None, self.allFields[PaytureParams.CustomerKey], self.allFields[PaytureParams.PaytureId] ).processSync()
         return
@@ -209,7 +205,7 @@ class Router(object):
         sessionId = self.allFields[PaytureParams.SessionId]
         print( 'SessionId: %s' % (sessionId))
         self.circleChanges( "SessionId" )
-        self.response = merchant.ewallet(command).expandSessionId( self.allFields[PaytureParams.SessionId]).processSync()
+        self.response = self.Merchant.ewallet(command).expandSessionId( self.allFields[PaytureParams.SessionId]).processSync()
 
     def getCustomer(self):
         customer = self.customerFromCurrentSettings()
@@ -282,7 +278,7 @@ class Router(object):
         for elem in props:
             if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
                 continue
-            propsPayInfo += elem + '=' +getattr(payInfo, elem) + ';\n'
+            propsPayInfo += elem + '=' + getattr(payInfo, elem) + ';\n'
         print( "Default settings PayInfo:" )
         print( propsPayInfo )
         self.circleChanges("Change PayInfo")
@@ -316,8 +312,8 @@ class Router(object):
             cardId = self.allFields[ PaytureParams.CardId ]
             print( "CardId: %s" % (cardId) )
             self.circleChanges( "CardId" )
-            self.response = merchant.ewallet( command ).expandForCardOperation( customer, self.allFields[ PaytureParams.CardId ], 101 if command == PaytureCommands.Activate else None ).processSync()
-        self.response = merchant.ewallet( command ).expandCustomer( customer ).processSync()
+            self.response = self.Merchant.ewallet( command ).expandForCardOperation( customer, self.allFields[ PaytureParams.CardId ], 101 if command == PaytureCommands.Activate else None ).processSync()
+        self.response = self.Merchant.ewallet( command ).expandCustomer( customer ).processSync()
 
     def circleChanges(self, message):
         val = input("Please enter <1> if you wanna change %s:" % (message))
@@ -344,30 +340,9 @@ class Router(object):
 
 
     def listCommands(self):
-        print("Commands for help:\n\n" + 
-                            "* fields - list current key-value pairs that used in request to Payture server.\n\n" +
-                            "* changefields - command for changing current values of  key-value pairs that used in request to Payture server.\n\n" + 
-                            "* commands - list avaliable commands for this console program.\n\n" + 
-                            "* changemerchant - commands for changing current merchant account settings.\n\n" +
-                            "* help - commands that types this text (description of commands that you can use in this console program.).\n\n\n" )
-        print("Commands for invoke PaytureAPI functions.\n" +
-                "* pay - use for one-stage payment. In EWALLET an INPAY api this command can be use for block funds - if you specify SessionType=Block.\n\n" +
-                "* block - use for block funds on Customer card. After that command the funds can be charged by Charge command or unblocked by Unblock command. This command use only for API.\n\n" + 
-                "* charge - write-off of funds from customer card.\n\n" + 
-                "* unblock - unlocking of funds on customer card.\n\n" +
-                "* refund - operation for refunds.\n\n" + 
-                "* getsstate - use for getting the actual state of payments in Payture processing system. This command use only for API.\n\n" +
-                "* paystatus - use for getting the actual state of payments in Payture processing system. This command use for EWALLET and INPAY.\n\n" + 
-                "* init - use for payment initialization, customer will be redirected on Payture payment gateway page for enter card's information.\n\n" + 
-                "* register - register new customer. This command use only for EWALLET.\n\n" +
-                "* check - check for existing customer account in Payture system. This command use only for EWALLET.\n\n" + 
-                "* update - This command use only for EWALLET.\n\n" + 
-                "* delete - delete customer account from Payture system. This command use only for EWALLET.\n\n" +
-                "* add - register new card in Payture system. This command use only for EWALLET.\n\n" +
-                "* activate - activate registered card in Payture system. This command use only for EWALLET.\n\n" +   
-                "* sendcode - provide additional authentication for customer payment. This command use only for EWALLET.\n\n" +
-                "* remove - delete card from Payture system. This command use only for EWALLET.\n\n" )
-        return
+        commands = open("testapp/commandslist.txt", "r")
+        print (commands.read())
+        commands.close()
 
     def changeMerchant(self):
         _merchantKey = input('Type Merchant account name: ')
@@ -375,11 +350,11 @@ class Router(object):
         _host = input('Type host name: ')
         print( "Merchant account settings: \n\tMerchantName=%s\n\tMerchantPassword=%s\n\tHOST=%s\n" % (_merchantKey, _merchantPassword, _host) )
         self.Merchant = Merchant( _merchantKey, _merchantPassword, _host )
-        return
 
     def help(self):
-        print("\n\nThen console promt you 'Type command' - you can type commands for invoke PaytureAPI functions and you can types commands for help.")
-        print("After you type the command an appropriate method will be execute. If the data is not enough for execute the program promt for additional input.")
+        help = open("testapp/help.txt", "r")
+        print (help.read())
+        help.close()
         
 
     def writeResult(self):
