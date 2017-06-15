@@ -407,15 +407,15 @@ After transaction is expanded you can send request to the Payture server via one
 ### PayInfo <a id="PayInfo"></a>
 This object used for PaytureAPI and consist of following fields:
 
-| Fields's name    | Field's type | Definition                                      |
-| ---------------- | ------------ | ----------------------------------------------- |
-| OrderId          | string       | Payment identifier in your service system.      |
-| Amount           | long         | Amount of payment kopec.                        |
-| PAN              | string       | Card's number.                                  |
-| EMonth           | string       | The expiry month of card.                       |
-| EYear            | string       | The expiry year of card.                        |
-| CardHolder       | string       | Card's holder name.                             |
-| SecureCode       | string       | CVC2/CVV2.                                      |
+| Fields's name    | Definition                                      |
+| ---------------- | ----------------------------------------------- |
+| OrderId          | Payment identifier in your service system.      |
+| Amount           | Amount of payment kopec.                        |
+| PAN              | Card's number.                                  |
+| EMonth           | The expiry month of card.                       |
+| EYear            | The expiry year of card.                        |
+| CardHolder       | Card's holder name.                             |
+| SecureCode       | CVC2/CVV2.                                      |
 
 You can use following constructor for creation PayInfo object:
 ```python
@@ -433,14 +433,14 @@ info = PayInfo(
 ### Card <a id="Card"></a>
 This object used for PaytureEWallet and consist of following fields:
 
-| Fields's name    | Field's type | Definition                                      |
-| ---------------- | ------------ | ----------------------------------------------- |
-| CardId           | string       | Card identifier in Payture system.              |
-| CardNumber       | string       | Card's number.                                  |
-| EMonth           | int          | The expiry month of card.                       |
-| EYear            | int          | The expiry year of card.                        |
-| CardHolder       | string       | Card's holder name.                             |
-| SecureCode       | int          | CVC2/CVV2.                                      |
+| Fields's name    | Definition                                      |
+| ---------------- | ----------------------------------------------- |
+| CardId           | Card identifier in Payture system.              |
+| CardNumber       | Card's number.                                  |
+| EMonth           | The expiry month of card.                       |
+| EYear            | The expiry year of card.                        |
+| CardHolder       | Card's holder name.                             |
+| SecureCode       | CVC2/CVV2.                                      |
 
 Examples of creation instance of Card:
 ```python
@@ -450,19 +450,19 @@ cardWithId = Card( "4111111111111112", 10, 20, "Test Test", 123, "40252318-de07-
 ### Data <a id="Data"></a>
 This is object used for PaytureEWallet and PaytureInPay, consist of following fields 
 
-| Fields's name    | Field's type  | Definition                                                                                                          |
-| ---------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| SessionType      | string        | Session Type - determines the type of operation. In this object - it's string representation of SessionType enum.   |
-| IP               | string        | Customer's IP adress.                                                                                               |
-| TemplateTag      | string        | Tamplate which used for payment page.                                                                               | 
-| Language         | string        | Addition parameter for determining language of template.                                                            |
-| OrderId          | string        | Payment identifier in your service system.                                                                          |
-| Amount           | long          | Amount of payment kopec.                                                                                            |
-| Url              | string        | The address to which Customer will be return after completion of payment.                                            |
-| Product          | string        | Name of product.                                                                                                    | 
-| Total            | int?          | Total Amount of purchase.                                                                                           |
-| ConfirmCode      | string        | Confirmation code from SMS. Required in case of confirm request for current transaction.                            |
-| CustomFields     | string        | Addition transaction's fields.                                                                                      |
+| Fields's name    | Definition                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| SessionType      | Session Type - determines the type of operation. In this object - it's string representation of SessionType enum.   |
+| IP               | Customer's IP adress.                                                                                               |
+| TemplateTag      | Tamplate which used for payment page.                                                                               | 
+| Language         | Addition parameter for determining language of template.                                                            |
+| OrderId          | Payment identifier in your service system.                                                                          |
+| Amount           | Amount of payment kopec.                                                                                            |
+| Url              | The address to which Customer will be return after completion of payment.                                           |
+| Product          | Name of product.                                                                                                    | 
+| Total            | Total Amount of purchase.                                                                                           |
+| ConfirmCode      | Confirmation code from SMS. Required in case of confirm request for current transaction.                            |
+| CustomFields     | Addition transaction's fields.                                                                                      |
 
 Examples of creation instance of Data:
 ```python
@@ -517,12 +517,12 @@ PaytureCommands list and availability in every api type
 ### Customer <a id="Customer"></a>
 This object used for PaytureEWallet and consist of following fields:
 
-| Fields's name    | Field's type | Definition                                                       |
-| ---------------- | ------------ | ---------------------------------------------------------------- |
-| VWUserLgn        | string       | Customer's identifier in Payture system. (Email is recommended). |
-| VWUserPsw        | string       | Customer's password in Payture system.                           |
-| PhoneNumber      | string       | Customer's phone number.                                         |
-| Email            | string       | Customer's email.                                                |
+| Fields's name    | Definition                                                       |
+| ---------------- | ---------------------------------------------------------------- |
+| VWUserLgn        | Customer's identifier in Payture system. (Email is recommended). |
+| VWUserPsw        | Customer's password in Payture system.                           |
+| PhoneNumber      | Customer's phone number.                                         |
+| Email            | Customer's email.                                                |
 
 ```python
 customer = Customer( "testLogin@mail.com", "customerPassword") #create customer without phone and email
@@ -533,29 +533,29 @@ customer2 = Customer( "testLogin@mail.com", "customerPassword", "77125141212", "
 ### PaytureResponse <a id="PaytureResponse"></a>
 This object is response from the Payture server and consist of following fields:
 
-| Fields's name    | Field's type                | Definition                                                                                       |
-| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
-| APIName          | PaytureCommands             | Name of commands that was called.                                                                |
-| Success          | bool                        | Determines the success of processing request.                                                    |
-| ErrCode          | string                      | Will be contain code of error if one occur during process the transaction on the Payture server. | 
-| RedirectURL      | string                      | Will be contain the new location for redirect. (for PaytureCommands.Init).                       |
-| Attributes       | Dictionary<string, string>  | Addition attributes from the response.                                                           |
-| InternalElements | dynamic                     | Additional information from the response.                                                        |
-| ListCards        | List<CardInfo>              | List of cards, theese registered for current Customer (this field filled for PaytureCommands.GetList)  |
-| ResponseBodyXML  | string                      | String representation received from Payture server in XML format                                 |
+| Fields's name    | Definition                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| APIName          | Name of commands that was called.                                                                |
+| Success          | Determines the success of processing request.                                                    |
+| ErrCode          | Will be contain code of error if one occur during process the transaction on the Payture server. | 
+| RedirectURL      | Will be contain the new location for redirect. (for PaytureCommands.Init).                       |
+| Attributes       | Addition attributes from the response.                                                           |
+| InternalElements | Additional information from the response.                                                        |
+| ListCards        | List of cards, theese registered for current Customer (this field filled for PaytureCommands.GetList)  |
+| ResponseBodyXML  | String representation received from Payture server in XML format                                 |
 
 
 ### CardInfo <a id="CardInfo"></a>
 Special object for containing Customer card's information, that we're received from PaytureCommands.GetList command
 
-| Fields's name    | Field's type  | Definition                                                             |
-| ---------------- | ------------- | ---------------------------------------------------------------------- |
-| CardNumber       | string        | The masked card's number.                                              |
-| CardId           | string        | Card identifier in Payture system.                                     |
-| CardHolder       | string        | Name of card's holder                                                  | 
-| ActiveStatus     | string        | Indicate of card's active status in Payture system                     |
-| Expired          | bool          | Indicate whether the card expired on the current date                  |
-| NoCVV            | bool          | Indicate whether or not payment without CVV/CVC2                       |
+| Fields's name    | Definition                                                             |
+| ---------------- | ---------------------------------------------------------------------- |
+| CardNumber       | The masked card's number.                                              |
+| CardId           | Card identifier in Payture system.                                     |
+| CardHolder       | Name of card's holder                                                  | 
+| ActiveStatus     | Indicate of card's active status in Payture system                     |
+| Expired          | Indicate whether the card expired on the current date                  |
+| NoCVV            | Indicate whether or not payment without CVV/CVC2                       |
 
 ### Transaction <a id="Transaction"></a>
 You don't needed to create object of this type by yoursef - it will be created for you then you access to appopriate API via Merchant object. 
