@@ -44,11 +44,11 @@ To get access for API usage just create the instance of Merchant object, pass in
 
 Pass the 'https:#sandbox.payture.com' for test as the name of Host (first parameter).
 ```python
-merchant = Merchant("https:#sandbox.payture.com", "MyMerchantAccount", "MyPassword")
+merchant = Merchant("https://sandbox.payture.com", "MyMerchantAccount", "MyPassword")
 ```
 We're completed the first step! Go next!
 ***
-Please note, that  Key = "'MyMerchantAccount" and Password = "MyMerchantAccount"  - fake, [our support](http:#payture.com/kontakty/) help you to get one!
+Please note, that  Key = "'MyMerchantAccount" and Password = "MyMerchantAccount"  - fake, [our support](http://payture.com/kontakty/) help you to get one!
 ***
 
 ## Second Step - Get access to required API <a id="accessToAPI" ></a>
@@ -142,11 +142,11 @@ payinfo = PayInfo(
     "Test Test",                    # cardholder name, required
     "123",                          # secure code, required
     "TestOrder0000000000512154545", # payment's identifier in Merchant system
-    "41000"                         # amount, required
+    41000                           # amount, required
 )
 customFields = {
-    { "IP" : "93.120.05.36" },
-    { "Description" : "SomeUsefullHere" }
+    'IP' : '93.120.05.36' ,
+    'Description' : 'SomeUsefullHere' 
 } # optional, can be None 
 
 customerKey = "testKey"     # needed for AntiFraud check 
@@ -169,9 +169,9 @@ You must specify following fields of Data object then call Init api method of Pa
 Other fields is optional. Example:
 ```python
 orderId = "TESTORD000000000000000000"
-amount = 102000; # in kopecs
+amount = 102000  # in kopecs
 ip = "93.45.120.14"
-data = Data( SessionType.Pay, orderId, amount, ip )
+data = Data( SessionType.Pay, ip { 'OrderId' : orderId, 'Amount' : amount } )
 
 # Create and expand transaction 
 initTransaction = merchant.inpay( PaytureCommands.Init ).expandInit( data )
@@ -199,7 +199,7 @@ product = "SomeCoolProduct"                         # optional, maybe  None
 total = amount                                      # optional, maybe  None
 template = "tempTag"                                # optional, maybe  None
 lang = "RU"                                         # optional, maybe  None
-data = Data ( sessionType, orderId, amount, ip, product, total, template, lang ) # required
+data = Data ( sessionType, ip, { 'OrderId' : orderId, 'Amount' : amount,  'Product' : product, 'Total' : total, 'Tamplate' : template, 'Language' : lang } ) # required
 
 # Create and expand transaction 
 initPayTransaction = merchant.ewallet( PaytureCommands.Init ).expandInit( customer, cardId, data ) # SessionType=Pay or SessionType=Block
@@ -214,13 +214,7 @@ sessionType = SessionType.Add # required
 ip = "93.45.120.14"           # required
 template = "tempTag"          # optional, maybe None
 lang = "RU"                   # optional, maybe None
-data =  Data # NEEEEEEEED CHANGE THIS!!!!!!
-{
-    SessionType = sessionType,
-    IP = ip,
-    TemplateTag = template,
-    Language = lang
-} # required
+data =  Data( sessionType, ip, { 'TemplateTag' : template, 'Language' : lang } ) # required
 
 # Create and expand transaction 
 initAddTransaction = merchant.ewallet( PaytureCommands.Init ).expandInit( customer, None, data ); # SessionType=Add
@@ -247,9 +241,7 @@ ip = "93.45.120.14"                                 # required
 confirmCode = "SomeCoolProduct"                     # optional, maybe None
 customFields = ""                                   # optional maybe None
 customer = Customer( "testCustomerEW", "testPass" ) # required
-data = Data ( sessionType, orderId, amount, ip )    # required
-data.ConfirmCode = confirmCode
-data.CustomFields = customFields
+data = Data ( sessionType, ip, { 'OrderId': orderId, 'Amount' : amount, 'ConfirmCode' : confirmCode, 'CustomFields' : customFields } )    # required
 
 # Create and expand transaction 
 payTransaction = merchant.ewallet( PaytureCommands.Pay ).expandForMerchantPayReg( customer, cardId, secureCode, data )
@@ -267,9 +259,7 @@ amount = 102000                         # in kopec, required
 ip = "93.45.120.14"                     # required
 confirmCode = "SomeCoolProduct"         # optional, maybe None
 customFields = ""                       # optional maybe None
-data = Data ( sessionType, orderId, amount, ip ) # required
-data.ConfirmCode = confirmCode
-data.CustomFields = customFields
+data = Data ( sessionType, ip, { 'OrderId': orderId, 'Amount' : amount, 'ConfirmCode' : confirmCode, 'CustomFields' : customFields } )    # required
 
 customer = Customer( "testCustomerEW", "testPass" ) #required
 
@@ -292,7 +282,7 @@ This overload you call for api
 
 Example:
 ```python
-customer = Customer( "testCustomerEW", "testPass" ); #required
+customer = Customer( "testCustomerEW", "testPass" ) #required
 card = Card( 
     "4111111111111112", # card number
     10,                 # expiration month
@@ -476,46 +466,22 @@ This is object used for PaytureEWallet and PaytureInPay, consist of following fi
 
 Examples of creation instance of Data:
 ```python
-# Data( SessionType sessionType, string orderId, long amount, string ip )
-dataFirst = Data( 
-    SessionType.Pay, #SessionType.Pay - for one-stage operation; SessionType.Block - for two-stage operation; SessionType.Add - for adding card (PaytureEWallet)
-    "TestOrder0000000000512154545",
-    20000, 
-    "127.0.0.1"
-)
-
-# Data( SessionType sessionType, string orderId, long amount, string ip, string product, Int64? total, string url, string template, string lang ) 
-dataSecond =  Data( 
+# Data(sessionType, ip, **kwargs) 
+# in **kwargs pass only fields in which you intresting in
+data = Data( 
     SessionType.Pay, # SessionType.Pay - for one-stage operation; SessionType.Block - for two-stage operation; SessionType.Add - for adding card (PaytureEWallet)
-    "TestOrder0000000000512154545",
-    20000, 
-    "127.0.0.1",
-    "CoolProductName",
-    20000,
-    "https:#url.ru", # return address for customer then payment will be processed
-    "MyTemplate",
-    "RU"
-)
-
-
- customFields = { # This is addition transaction's fields in PaytureEWallet
-    { "Email" : "test@test.com" },
-    { "CustomerDescription" : "SoImpotantInfo" },
-    { "AdditionField" : "AdditionInfo" }
-}
-confirmCode = "123454787" # required in case in confirm request for current transaction OrderId, otherwise pass null
-# Data( SessionType sessionType, string orderId, long amount, string ip, string product, Int64? total, string confirmCode,  IDictionary<string, string> customFields, string template, string lang )
-var dataThird = new Data( 
-    SessionType.Pay, # SessionType.Pay - for one-stage operation; SessionType.Block - for two-stage operation; SessionType.Add - for adding card (PaytureEWallet)
-    "TestOrder0000000000512154545",
-    20000, 
-    "127.0.0.1",
-    "CoolProductName",
-    20000,
-    confirmCode,
-    customFields,
-    "MyTemplate",
-    "RU"
+    "127.0.0.1",     # IP
+    {
+        'OrderId' : 'TestOrder0000000000512154545',
+        'Amount' : 20000, 
+        'Total' : 20000,
+        'Product' : 'ProductName',
+        'TemplateTag' : 'Tag',
+        'Language' : 'RU'
+        'Url' : 'http://returncustomer.ru',
+        'CustomFields' : 'SomeField=FieldValue;AnotherField=AnotherValue;AndLastAddition=LastValue;'
+        'ConfirmCode' : 1244555
+    }
 )
 ```
 
@@ -601,5 +567,5 @@ This object contans the necessary fields which used in request construction proc
 You can download simple test application - realized as console app - and test work of our API just type the command in command line. Full description of command for app available into app by the command help. And then the app starts - it ask you for necessity of assistance.
 
 
-Visit our [site](http:#payture.com/) for more information.
-You can find our contact [here](http:#payture.com/kontakty/).
+Visit our [site](http://payture.com/) for more information.
+You can find our contact [here](http://payture.com/kontakty/).
