@@ -12,10 +12,10 @@ class TransactionAPI(transaction.Transaction):
         """Expand transaction for API Methods: Pay/Block
 
         Keyword parameters:
-        info --
-        customFields --
-        customerKey --
-        paytureId --
+        info -- Object that contains params for transaction's processing
+        customFields -- Addition fields for processing operation
+        customerKey -- Customer's identifier in Payture AntiFraud system
+        paytureId -- Payment's identifier in Payture AntiFraud system
 
         Return value:
         Current expanded transaction
@@ -42,8 +42,8 @@ class TransactionAPI(transaction.Transaction):
         """Expand transaction for 3DS Methods: Pay3DS/Block3DS
 
         Keyword parameters:
-        orderId --
-        paRes --
+        orderId -- Current transaction's identifier in Merchant system
+        paRes -- Encrypted string that contains 3DS authentication result (recieved from ACS)
 
         Return value:
         Current expanded transaction
