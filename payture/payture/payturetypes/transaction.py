@@ -1,7 +1,7 @@
-from . import constants
+import constants
 import requests
 import xml.etree.ElementTree as ET
-from . import paytureresponse as pr
+import paytureresponse 
 
 class RequestClient(object):
     """Base class for posting request to Payture server"""
@@ -23,8 +23,7 @@ class RequestClient(object):
         for Ewallet and InPay Methods: Charge/UnBlock/Refund/PayStatus
 
         Keyword parameters:
-	    body -- String representation of response body
-	    command --
+	    responseBody -- String representation of response body
 
         Return value:
         Return PaytureResponse object
@@ -43,8 +42,8 @@ class RequestClient(object):
         red = None
         if(apiname == 'Init'):
             red = '%s/%s/%s?%s=%s' % (self._merchant.HOST, self._apiType, self._sessionType, constants.PaytureParams.SessionId, root.attrib[constants.PaytureParams.SessionId] )
-        paytureResponse = pr.PaytureResponse(apiname, success, err, RedirectURL = red )
-        return paytureResponse
+        response = paytureresponse.PaytureResponse(apiname, success, err, RedirectURL = red )
+        return response
 
 
 class Transaction(RequestClient):
@@ -92,14 +91,14 @@ class Transaction(RequestClient):
                 self._requestKeyValuePair[constants.PaytureParams.Amount] = amount
 
         if(self.Command == constants.PaytureCommands.Refund or (self._apiType != constants.PaytureAPIType.api and (self.Command == constants.PaytureCommands.Charge or self.Command == constants.PaytureCommands.Unblock))):
-            self.expandMerchant(True, True)
+            self._expandMerchant(True, True)
         else:
-            self.expandMerchant()
+            self._expandMerchant()
 
         self._expanded = True
         return self
 
-    def expandMerchant(self, addKey = True, addPass = False ):
+    def _expandMerchant(self, addKey = True, addPass = False ):
         """ Expand transaction with Merchant key and password
 
         Keyword parameters:
@@ -116,13 +115,7 @@ class Transaction(RequestClient):
             self._requestKeyValuePair[constants.PaytureParams.Password] = self._merchant.Password
         return self
 
-
-    def processAsync(self):
-        if(self._expanded == False):
-            return PaytureResponse.errorResponse(self.Command, 'Params are not set')
-        return self.post(self.getPath(),self._requestKeyValuePair) 
-
-    def processSync(self):
+    def process(self):
         """ Process request to Payture server synchronously
 
         Return value:
@@ -130,14 +123,14 @@ class Transaction(RequestClient):
 
         """
         if(self._expanded == False):
-            return PaytureResponse.PaytureResponse.errorResponse(self.Command, 'Params are not set')
+            return paytureresponse.PaytureResponse.errorResponse(self.Command, 'Params are not set')
         return self.post(self.getPath(),self._requestKeyValuePair) 
 
     def getPath(self):
         """Form URL as string for request"""
         return '%s/%s/%s' % (self._merchant.HOST, self._apiType, self.Command)
     
-    def formRedirectURL(self, response):
+    def formRedirectURL(self, response):   #Delete this method??
         """  Helper method for PaytureCommand.Init for form Redirect URL and save it in RedirectURL field for convinience"""
         sessionId = response.Attribute[constants.PaytureParams.SessionId]
         response.RedirectURL = '%S/%s/%s?SessionId=%s' % (self._merchant.HOST, self._apiType, constants.PaytureCommands.Add if _sessionType == constants.SessionType.Add else constants.PaytureCommands.Pay, sessionId)

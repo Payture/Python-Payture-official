@@ -4,5 +4,6 @@
 /testApp/.vs
 /payture/payture/build
 /payture/payture/dist
+/payture/payture/payturetypes/__pycache__
 /payture/payture/payture.egg-info
 /payture/.vs

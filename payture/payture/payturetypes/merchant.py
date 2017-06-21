@@ -1,8 +1,9 @@
-from . import api
-from . import digitalwallet
-from . import ewallet
-from . import inpay
-from . import constants
+import api
+import digitalwallet
+import ewallet
+import inpay
+import constants
+
 
 class Merchant(object):
     """Object that contain Merchant account data (login and password) and string value of HOST for requests"""

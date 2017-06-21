@@ -1,5 +1,5 @@
 import string
-import payture
+from merchant import *
 from router import *
 
 _host = "http://sasha:7080";
@@ -7,7 +7,7 @@ _merchantKey = "elena_Test";
 _merchantPassword = "789555";
 
 
-merchant = payture.Merchant(_merchantKey, _merchantPassword, _host)
+merchant = Merchant(_merchantKey, _merchantPassword, _host)
 rout = Router(merchant)
 
 str = input( "Press space for get description of commands for this console program. " )
