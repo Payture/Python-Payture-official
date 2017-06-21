@@ -2,13 +2,13 @@ import string
 
 class EncodeString(object):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(EncodeString, self).__init__()
 
-    def getPropertiesString(self):
+    def _getPropertiesString(self):
         listattrs = dir(self)
         result = ""
         for elem in listattrs:
-            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+            if(elem.startswith('_') or elem.endswith('_')):
                 continue
             result += elem + '=' + str(getattr(self, elem)) + ';'
         return result
@@ -24,7 +24,7 @@ class PayInfo(EncodeString):
         self.SecureCode = secureCode
         self.OrderId = orderId
         self.Amount = amount
-
+        super(PayInfo, self).__init__()
 
 
 class Card(EncodeString):
@@ -35,7 +35,7 @@ class Card(EncodeString):
         self.CardHolder = cardHolder
         self.SecureCode = secureCode
         self.CardId = cardId
-        super().__init__(self)
+        super(Card, self).__init__()
 
 
 class Customer(EncodeString):
@@ -44,9 +44,10 @@ class Customer(EncodeString):
         self.VWUserPsw = password
         self.PhoneNumber = phone
         self.Email = email
+        super(Customer, self).__init__()
 
 class Data(EncodeString):
-    def __init__(self, sessionType, ip,  **kwargs):
+    def __init__(self, sessionType, ip, **kwargs):
         self.SessionType = sessionType
         self.IP = ip
         for key, value in kwargs.items():
@@ -68,5 +69,6 @@ class Data(EncodeString):
                 self.ConfirmCode = value
             elif(key == 'CustomFields'):
                 self.CustomFields = value
+        super(Data, self).__init__()
 
 

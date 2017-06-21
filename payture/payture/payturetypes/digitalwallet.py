@@ -1,5 +1,5 @@
-from . import transaction
-from . import constants
+import transaction
+import constants
 
 class TransactionDigitalWallet(transaction.Transaction):
     """Transaction class for Payture ApplePay and Payture AndroidPay"""
@@ -23,7 +23,7 @@ class TransactionDigitalWallet(transaction.Transaction):
         self._requestKeyValuePair[constants.PaytureParams.OrderId] = orderId
         self._requestKeyValuePair[constants.PaytureParams.PayToken] =  payToken 
         self._requestKeyValuePair[constants.PaytureParams.Method] = constants.DigitalPayMethods.PAY if  Command == constants.PaytureCommands.Pay else constants.DigitalPayMethods.BLOCK
-        self.expandMerchant()
+        self._expandMerchant()
         if(self._specialCommand == constants.PaytureCommands.AndroidPay and amount != None):
             self._requestKeyValuePair[constants.PaytureParams.Amount] = amount
         self.Command =  self._specialCommand

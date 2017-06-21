@@ -1,6 +1,6 @@
-from . import  transaction
+import transaction
 from collections import *
-from . import constants
+import constants
 
 class TransactionAPI(transaction.Transaction):
    """Transaction class for PaytureAPI"""
@@ -23,7 +23,7 @@ class TransactionAPI(transaction.Transaction):
         """
         if(info == None):
             return self
-        self._requestKeyValuePair[constants.PaytureParams.PayInfo] =  info.getPropertiesString()
+        self._requestKeyValuePair[constants.PaytureParams.PayInfo] =  info._getPropertiesString()
         self._requestKeyValuePair[constants.PaytureParams.OrderId] = info.OrderId
         self._requestKeyValuePair[constants.PaytureParams.Amount] =  info.Amount
         if(customFields != None and len(customFields) != 0):
@@ -34,7 +34,7 @@ class TransactionAPI(transaction.Transaction):
 
         if (paytureId != None):
             self._requestKeyValuePair[constants.PaytureParams.PaytureId] =  paytureId
-        self.expandMerchant()
+        self._expandMerchant()
         self._expanded = True
         return self
 
@@ -51,7 +51,7 @@ class TransactionAPI(transaction.Transaction):
         """
         self._requestKeyValuePair.Add( constants.PaytureParams.OrderId, orderId )
         self._requestKeyValuePair.Add( constants.PaytureParams.PaRes, paRes )
-        self.expandMerchant()
+        self._expandMerchant()
         self._expanded = True
         return self
 

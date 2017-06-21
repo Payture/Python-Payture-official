@@ -13,7 +13,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='payture',
-    version='0.0.15',
+    version='0.0.16',
 
     description='Official Payture API',
     #long_description=long_description,
@@ -29,10 +29,7 @@ setup(
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: MIT License',
 
-        # Specify the Python versions you support here. In particular, ensure
-        # that you indicate whether you support Python 2, Python 3 or both.
-        #'Programming Language :: Python :: 2',
-        #'Programming Language :: Python :: 2.7',
+
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',

@@ -1,7 +1,19 @@
 import random
 import sys
 import webbrowser
-from payture import *
+from constants import *
+from api import *
+from cardinfo import *
+from digitalwallet import *
+from ewallet import *
+from inpay import *
+from merchant import *
+from paytureresponse import *
+from transaction import *
+from encodedata import *
+
+
+
 
 class Router(object):
     def __init__(self, merchant):
@@ -10,7 +22,7 @@ class Router(object):
 	                        PaytureParams.VWUserLgn : "testCustomer@test.com",
 	                        PaytureParams.VWUserPsw : "pass123",
 	                        PaytureParams.CardId : "",
-	                        PaytureParams.IP : "12,.0.0.1",
+	                        PaytureParams.IP : "127.0.0.1",
 	                        PaytureParams.Amount : "100",
 	                        PaytureParams.SessionId : "",
 	                        PaytureParams.EMonth : "10",
@@ -125,7 +137,7 @@ class Router(object):
             #EWallet add card on Merchant side
             customer = self.getCustomer()
             card = self.getCard()
-            self.response = self.Merch.ewallet( PaytureCommands.Add ).expandForMerchantAdd(customer, card).processSync() 
+            self.response = self.Merch.ewallet( PaytureCommands.Add ).expandForMerchantAdd(customer, card).process() 
         elif(cmd == 'FIELDS'):
             for key in self.allFields:
                 print ('%s = %s' % (key, self.allFields[key]))
@@ -156,13 +168,13 @@ class Router(object):
             regcard = self.promtforuseregcard()
             if(regcard == False):
                 card = self.getCard()
-                self.response = self.Merch.ewallet( PaytureCommands.Pay ).expandForMerchantPayNoReg( customer, card, data ).processSync()
+                self.response = self.Merch.ewallet( PaytureCommands.Pay ).expandForMerchantPayNoReg( customer, card, data ).process()
         
             cardId = self.allFields[ PaytureParams.CardId ]
             secureCode = self.allFields[ PaytureParams.SecureCode ]
             print ( "CardId=%s; SecureCode=%s;" % (cardId, secureCode) )
             self.circleChanges( "CardId and SecureCode" )
-            self.response = self.Merch.ewallet( PaytureCommands.Pay ).expandForMerchantPayReg(customer,  self.allFields[ PaytureParams.CardId ],  self.allFields[ PaytureParams.SecureCode ],  data).processSync()   
+            self.response = self.Merch.ewallet( PaytureCommands.Pay ).expandForMerchantPayReg(customer,  self.allFields[ PaytureParams.CardId ],  self.allFields[ PaytureParams.SecureCode ],  data).process()   
         return
 
 
@@ -178,13 +190,13 @@ class Router(object):
         props = dir(payInfo)
         propsPayInfo = '' 
         for elem in props:
-            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+            if(elem.startswith('_') or elem.endswith('_')):
                 continue
             propsPayInfo += elem + '=' + str(getattr(payInfo, elem)) + ';\n'
         print( "Additional settings for request:" )
         print( "%s\nPaytureId = %s\nCustomerKey = %s\nCustomFields = %s\n " % (propsPayInfo, paytureId, custKey, custFields) )
         self.circleChanges("Change defaults for pay/block")
-        self.response = self.Merch.api(command).expandPayBlock( payInfo, None, self.allFields[PaytureParams.CustomerKey], self.allFields[PaytureParams.PaytureId] ).processSync()
+        self.response = self.Merch.api(command).expandPayBlock( payInfo, None, self.allFields[PaytureParams.CustomerKey], self.allFields[PaytureParams.PaytureId] ).process()
         return
  
     def chargeUnblockRefundGetState(self, command):
@@ -194,25 +206,25 @@ class Router(object):
         self.circleChanges("Change defaults")
 
         if ( apitype == PaytureAPIType.api ):
-            self.response = self.Merch.api( command ).expand( orderId,  amount ).processSync()
+            self.response = self.Merch.api( command ).expand( orderId,  amount ).process()
         elif ( apitype == PaytureAPIType.vwapi ):
-            self.response = self.Merch.ewallet( command ).expand( orderId,  amount ).processSync()
+            self.response = self.Merch.ewallet( command ).expand( orderId,  amount ).process()
         # elif()
         else:
-            self.response = self.Merch.inpay( command ).expand( orderId,  amount ).processSync()
+            self.response = self.Merch.inpay( command ).expand( orderId,  amount ).process()
 
     def payturePayOrAdd(self, command):
         sessionId = self.allFields[PaytureParams.SessionId]
         print( 'SessionId: %s' % (sessionId))
         self.circleChanges( "SessionId" )
-        self.response = self.Merch.ewallet(command).expandSessionId( self.allFields[PaytureParams.SessionId]).processSync()
+        self.response = self.Merch.ewallet(command).expandSessionId( self.allFields[PaytureParams.SessionId]).process()
 
     def getCustomer(self):
         customer = self.customerFromCurrentSettings()
         props = dir(customer)
         propsDataDefault = '' 
         for elem in props:
-            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+            if(elem.startswith('_') or elem.endswith('_')):
                 continue
             propsDataDefault += elem + '=' + str(getattr(customer, elem)) + ';\n'
         print( "Default settings for Customer:" )
@@ -233,7 +245,7 @@ class Router(object):
         props = dir(data)
         propsDataDefault = '' 
         for elem in props:
-            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+            if(elem.startswith('_') or elem.endswith('_')):
                 continue
             propsDataDefault += elem + '=' + str(getattr(data, elem)) + ';\n'
         print( "Default settings for request:" )
@@ -242,22 +254,21 @@ class Router(object):
         return self.dataFromCurrentSettings()
 
     def dataFromCurrentSettings(self):
-        #self.allFields[ PaytureParams.Total ] = self.allFields[ PaytureParams.Amount ]
-        return  Data(self.allFields[ PaytureParams.SessionType ],self.allFields[ PaytureParams.IP ], 
-                    Amount = self.allFields[ PaytureParams.Amount ],
-                    Language = self.allFields[ PaytureParams.Language ],
-                    OrderId = self.allFields[ PaytureParams.OrderId ],
-                    TemplateTag = self.allFields[ PaytureParams.TemplateTag ],
-                    Total = self.allFields[ PaytureParams.Total ],
-                    Product = self.allFields[ PaytureParams.Product ])
-
+        sess = self.allFields[ PaytureParams.SessionType ]
+        ip = self.allFields[ PaytureParams.IP ]
+        return Data(sess, ip, Amount = self.allFields[ PaytureParams.Amount ],
+                  Language = self.allFields[ PaytureParams.Language ],
+                  OrderId = self.allFields[ PaytureParams.OrderId ],
+                  TemplateTag = self.allFields[ PaytureParams.TemplateTag ],
+                  Total = self.allFields[ PaytureParams.Total ],
+                  Product = self.allFields[ PaytureParams.Product ])
 
     def getCard(self):
         card = self.cardFromCurrentSettings()
         props = dir(card)
         propsDataDefault = '' 
         for elem in props:
-            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+            if(elem.startswith('_') or elem.endswith('_') ):
                 continue
             propsDataDefault += elem + '=' + str(getattr(card, elem)) + ';\n'
         print( "Default settings for Card:" )
@@ -276,7 +287,7 @@ class Router(object):
         props = dir(payInfo)
         propsPayInfo = '' 
         for elem in props:
-            if(elem.startswith('_') or elem.endswith('_') or elem.startswith('get')):
+            if(elem.startswith('_') or elem.endswith('_') ):
                 continue
             propsPayInfo += elem + '=' + str(getattr(payInfo, elem)) + ';\n'
         print( "Default settings PayInfo:" )
@@ -301,9 +312,9 @@ class Router(object):
         if(apitype == PaytureAPIType.vwapi):
             customer = self.getCustomer()
             cardId = self.allFields[ PaytureParams.CardId ]
-            self.response = self.Merch.ewallet( PaytureCommands.Init ).expandInit( customer, cardId, data ).processSync()
+            self.response = self.Merch.ewallet( PaytureCommands.Init ).expandInit( customer, cardId, data ).process()
         else:
-            self.response = self.Merch.inpay( PaytureCommands.Init ).expandInit( data ).processSync()
+            self.response = self.Merch.inpay( PaytureCommands.Init ).expandInit( data ).process()
         webbrowser.open(self.response.RedirectURL)
 
     def customerAndCardApi(self, command):
@@ -312,8 +323,8 @@ class Router(object):
             cardId = self.allFields[ PaytureParams.CardId ]
             print( "CardId: %s" % (cardId) )
             self.circleChanges( "CardId" )
-            self.response = self.Merch.ewallet( command ).expandForCardOperation( customer, self.allFields[ PaytureParams.CardId ], 101 if command == PaytureCommands.Activate else None ).processSync()
-        self.response = self.Merch.ewallet( command ).expandCustomer( customer ).processSync()
+            self.response = self.Merch.ewallet( command ).expandForCardOperation( customer, self.allFields[ PaytureParams.CardId ], 101 if command == PaytureCommands.Activate else None ).process()
+        self.response = self.Merch.ewallet( command ).expandCustomer( customer ).process()
 
     def circleChanges(self, message):
         val = input("Please enter <1> if you wanna change %s:" % (message))
@@ -367,4 +378,3 @@ class Router(object):
 
     def generateAmount(self):
         self.allFields[ PaytureParams.Amount ] = self.rand.randint( 50, 100000 )
-        #self.allFields[ PaytureParams.Amount ] = '%s' % ( self.rand.randint( 50, 100000 ))

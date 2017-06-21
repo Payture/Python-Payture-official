@@ -1,5 +1,5 @@
-from . import transaction
-from . import constants
+import transaction
+import constants
 
 class TransactionInPay(transaction.Transaction):
     """Transaction class for PaytureInPay"""
@@ -18,9 +18,9 @@ class TransactionInPay(transaction.Transaction):
         """
         if ( data == None ):
             return self
-        self._sessionType = SessionType.Pay
-        self._requestKeyValuePair[constants.PaytureParams.Data]  = data.getPropertiesString()
-        self.expandMerchant()
+        self._sessionType = constants.SessionType.Pay
+        self._requestKeyValuePair[constants.PaytureParams.Data]  = data._getPropertiesString()
+        self._expandMerchant()
         self._expanded = True
         return self
     
