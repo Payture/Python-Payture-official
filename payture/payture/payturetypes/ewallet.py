@@ -4,7 +4,7 @@ import constants
 class TransactionEWallet(transaction.Transaction):
     """Transaction class for PaytureEWallet"""
     def __init__(self, command, merchant):
-         super().__init__(constants.PaytureAPIType.vwapi, command, merchant)
+         super(TransactionEWallet, self).__init__(constants.PaytureAPIType.vwapi, command, merchant)
     
     def expandForMerchantAdd(self, customer, card):
         """Expand transaction for EWallet Methods: Add (on Merchant side)

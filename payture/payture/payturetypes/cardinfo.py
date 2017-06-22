@@ -7,4 +7,4 @@ class CardInfo(object):
         self.ActiveStatus = activeStatus
         self.Expired = expired
         self.NoCVV = nocvv
-        super().__init__()
+        super(CardInfo, self).__init__()

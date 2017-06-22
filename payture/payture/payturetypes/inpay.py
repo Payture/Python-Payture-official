@@ -4,7 +4,7 @@ import constants
 class TransactionInPay(transaction.Transaction):
     """Transaction class for PaytureInPay"""
     def __init__(self, command, merchant):
-        return super().__init__(constants.PaytureAPIType.apim, command, merchant)
+        return super(TransactionInPay, self).__init__(constants.PaytureAPIType.apim, command, merchant)
     
     def expandInit(self, data):
         """Expand transaction for EWallet Methods: Init

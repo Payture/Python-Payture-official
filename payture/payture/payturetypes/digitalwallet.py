@@ -6,7 +6,7 @@ class TransactionDigitalWallet(transaction.Transaction):
     
     def __init__(self, command, merchant, specialcmd):
         self._specialCommand = specialcmd
-        super().__init__(constants.PaytureAPIType.api, command, merchant)
+        super(TransactionDigitalWallet, self).__init__(constants.PaytureAPIType.api, command, merchant)
     
     def expandPayBlock(self, payToken, orderId, amount):
         """Expand transaction for ApplePay and AndroidPay Methods: Pay/Block
