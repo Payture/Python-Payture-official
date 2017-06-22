@@ -6,17 +6,17 @@ import paytureresponse
 class RequestClient(object):
     """Base class for posting request to Payture server"""
     def __init__(self):
-        super().__init__()
+        super(RequestClient, self).__init__()
 
-    def post(self, url, content):
+    def _post(self, url, content):
         """Sync "POST" HTTP method for pass data to Payture"""
         r = requests.post(url, content)
         cont = r.content
         print( "Response:\n" + r.text )
-        return self.parseXMLResponse(r.text)
+        return self._parseXMLResponse(r.text)
 
 
-    def parseXMLResponse(self, responseBody):
+    def _parseXMLResponse(self, responseBody):
         """Helper method for parsing received response (that in XML format) 
 
         for API Methods: Charge/UnBlock/Refund/GetState  
@@ -42,7 +42,7 @@ class RequestClient(object):
         red = None
         if(apiname == 'Init'):
             red = '%s/%s/%s?%s=%s' % (self._merchant.HOST, self._apiType, self._sessionType, constants.PaytureParams.SessionId, root.attrib[constants.PaytureParams.SessionId] )
-        response = paytureresponse.PaytureResponse(apiname, success, err, RedirectURL = red )
+        response = paytureresponse.PaytureResponse(apiname, success, err, RedirectURL = red, ResponseBodyXML = responseBody)
         return response
 
 
@@ -56,7 +56,8 @@ class Transaction(RequestClient):
         self._expanded = False
         self.Command = command
         self._requestKeyValuePair = {}
-        
+        super(Transaction, self).__init__()
+
     def expand(self, orderId, amount):
         """Expand transaction 
 
@@ -124,16 +125,8 @@ class Transaction(RequestClient):
         """
         if(self._expanded == False):
             return paytureresponse.PaytureResponse.errorResponse(self.Command, 'Params are not set')
-        return self.post(self.getPath(),self._requestKeyValuePair) 
+        return self._post(self.getPath(),self._requestKeyValuePair) 
 
     def getPath(self):
         """Form URL as string for request"""
         return '%s/%s/%s' % (self._merchant.HOST, self._apiType, self.Command)
-    
-    def formRedirectURL(self, response):   #Delete this method??
-        """  Helper method for PaytureCommand.Init for form Redirect URL and save it in RedirectURL field for convinience"""
-        sessionId = response.Attribute[constants.PaytureParams.SessionId]
-        response.RedirectURL = '%S/%s/%s?SessionId=%s' % (self._merchant.HOST, self._apiType, constants.PaytureCommands.Add if _sessionType == constants.SessionType.Add else constants.PaytureCommands.Pay, sessionId)
-        return response
-
-

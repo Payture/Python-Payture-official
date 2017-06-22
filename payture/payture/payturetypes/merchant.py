@@ -12,6 +12,7 @@ class Merchant(object):
         self.MerchantName = accountName
         self.Password = password
         self.HOST = host
+        super(Merchant, self).__init__()
 
     def api(self, command):
         """Create an empty transation for PaytureAPI."""

@@ -5,8 +5,8 @@ import constants
 class TransactionAPI(transaction.Transaction):
    """Transaction class for PaytureAPI"""
 
-   def __init__(self, command, merchant): 
-       return super().__init__(constants.PaytureAPIType.api, command, merchant)
+   def __init__(self, command, merchant):
+       super(TransactionAPI, self).__init__(constants.PaytureAPIType.api, command, merchant)
    
    def expandPayBlock(self, info, customFields, customerKey, paytureId):
         """Expand transaction for API Methods: Pay/Block
