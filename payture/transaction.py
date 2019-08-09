@@ -6,6 +6,9 @@ from payture import constants
 from payture import paytureresponse
 
 
+SUCCESS_MAP = {"True": True, "False": False}
+
+
 class RequestClient(object):
     """Base class for posting request to Payture server"""
 
@@ -39,8 +42,8 @@ class RequestClient(object):
             print(child.tag, child.attrib)
         print("=" * 30 + "\n\n\n")
         apiname = root.tag
-        err = True  # root.attrib['ErrCode']
-        success = root.attrib["Success"]
+        err = root.attrib['ErrCode']
+        success = SUCCESS_MAP[root.attrib["Success"]]
         red = None
         if apiname == "Init":
             red = "{}/{}/{}?{}={}".format(

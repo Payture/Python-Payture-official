@@ -65,7 +65,7 @@ class TransactionEWallet(transaction.Transaction):
         """
         if customer is None or cardId is None:
             return self
-        self._sessionType = data.SesstionType
+        self._sessionType = data.SessionType
         str = (
             customer._getPropertiesString()
             + "{}={};".format(constants.PaytureParams.CardId, cardId)

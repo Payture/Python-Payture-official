@@ -1,7 +1,7 @@
 class PaytureResponse(object):
-    def __init__(self, apiname, susses, errormes=None, **keywarg):
+    def __init__(self, apiname, success, errormes=None, **keywarg):
         self.APIName = apiname
-        self.Success = susses
+        self.Success = success
         self.ErrCode = errormes
         for key, value in keywarg.items():
             if key == "RedirectURL":
@@ -16,5 +16,6 @@ class PaytureResponse(object):
                 self.ResponseBodyXML = value
         super(PaytureResponse, self).__init__()
 
-    def errorResponse(command, error):
+    @classmethod
+    def errorResponse(cls, command, error):
         return PaytureResponse(command, False, error)
