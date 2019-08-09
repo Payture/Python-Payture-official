@@ -1,9 +1,2 @@
-/testApp/testApp/__pycache__
-/testApp/testApp/BaseTypes/__pycache__
-/testApp/testApp/TypesForEncoding/__pycache__
-/testApp/.vs
-/payture/payture/build
-/payture/payture/dist
-/payture/payture/payturetypes/__pycache__
-/payture/payture/payture.egg-info
-/payture/.vs
+.idea
+*__pycache__/
