@@ -1,2 +1,0 @@
-Then console promt you 'Type command' - you can type commands for invoke PaytureAPI functions and you can types commands for help.
-After you type the command an appropriate method will be execute. If the data is not enough for execute the program promt for additional input

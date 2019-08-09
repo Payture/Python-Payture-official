@@ -1,1 +1,0 @@
-#Cool Payture module description

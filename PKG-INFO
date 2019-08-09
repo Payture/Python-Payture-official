@@ -1,0 +1,19 @@
+Metadata-Version: 1.1
+Name: payture
+Version: 0.0.17
+Summary: Official Payture API
+Home-page: https://github.com/Payture/Python-Payture-official
+Author: Soloveva Elena
+Author-email: elena.solovieva@payture.com
+License: MIT
+Description: UNKNOWN
+Keywords: payments online-payments payture paytureapi transaction
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
