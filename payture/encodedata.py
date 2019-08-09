@@ -1,5 +1,3 @@
-import string
-
 class EncodeString(object):
     def __init__(self, **kwargs):
         super(EncodeString, self).__init__()

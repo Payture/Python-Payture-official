@@ -1,4 +1,3 @@
-
 class PaytureCommands(object):
     Unknown = 'Unknown'
     Pay = 'Pay'

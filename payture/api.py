@@ -1,5 +1,4 @@
 from payture import transaction
-from collections import *
 from payture import constants
 
 class TransactionAPI(transaction.Transaction):
