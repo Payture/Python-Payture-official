@@ -1,12 +1,14 @@
-from payture import transaction
 from payture import constants
+from payture import transaction
 
 
 class TransactionAPI(transaction.Transaction):
     """Transaction class for PaytureAPI"""
 
     def __init__(self, command, merchant):
-        super(TransactionAPI, self).__init__(constants.PaytureAPIType.api, command, merchant)
+        super(TransactionAPI, self).__init__(
+            constants.PaytureAPIType.api, command, merchant
+        )
 
     def expandPayBlock(self, info, customFields, customerKey, paytureId):
         """Expand transaction for API Methods: Pay/Block
@@ -21,19 +23,24 @@ class TransactionAPI(transaction.Transaction):
         Current expanded transaction
 
         """
-        if (info == None):
+        if info is None:
             return self
-        self._requestKeyValuePair[constants.PaytureParams.PayInfo] = info._getPropertiesString()
+        self._requestKeyValuePair[
+            constants.PaytureParams.PayInfo
+        ] = info._getPropertiesString()
         self._requestKeyValuePair[constants.PaytureParams.OrderId] = info.OrderId
         self._requestKeyValuePair[constants.PaytureParams.Amount] = info.Amount
-        if (customFields != None and len(customFields) != 0):
+        if customFields is not None and len(customFields) != 0:
             self._requestKeyValuePair[
-                constants.PaytureParams.CustomFields] = ''  # customFields.Aggregate( "", ( a, c ) => a += $"{c.Key}={c.Value};" ) );
+                constants.PaytureParams.CustomFields
+            ] = (
+                ""
+            )  # customFields.Aggregate( "", ( a, c ) => a += $"{c.Key}={c.Value};" ) );
 
-        if (customerKey != None):
+        if customerKey is not None:
             self._requestKeyValuePair[constants.PaytureParams.CustomerKey] = customerKey
 
-        if (paytureId != None):
+        if paytureId is not None:
             self._requestKeyValuePair[constants.PaytureParams.PaytureId] = paytureId
         self._expandMerchant()
         self._expanded = True

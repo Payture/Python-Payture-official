@@ -1,5 +1,5 @@
-from payture import transaction
 from payture import constants
+from payture import transaction
 
 
 class TransactionDigitalWallet(transaction.Transaction):
@@ -7,15 +7,17 @@ class TransactionDigitalWallet(transaction.Transaction):
 
     def __init__(self, command, merchant, specialcmd):
         self._specialCommand = specialcmd
-        super(TransactionDigitalWallet, self).__init__(constants.PaytureAPIType.api, command, merchant)
+        super(TransactionDigitalWallet, self).__init__(
+            constants.PaytureAPIType.api, command, merchant
+        )
 
     def expandPayBlock(self, payToken, orderId, amount):
         """Expand transaction for ApplePay and AndroidPay Methods: Pay/Block
 
         Keyword parameters:
         payToken -- PaymentData from PayToken for current transaction
-	    orderId -- current transaction OrderId
-	    amount -- current transaction amount in kopec - pass null for Apple Pay
+        orderId -- current transaction OrderId
+        amount -- current transaction amount in kopec - pass null for Apple Pay
 
         Return value:
         Returns current expanded transaction
@@ -23,10 +25,16 @@ class TransactionDigitalWallet(transaction.Transaction):
         """
         self._requestKeyValuePair[constants.PaytureParams.OrderId] = orderId
         self._requestKeyValuePair[constants.PaytureParams.PayToken] = payToken
-        self._requestKeyValuePair[
-            constants.PaytureParams.Method] = constants.DigitalPayMethods.PAY if Command == constants.PaytureCommands.Pay else constants.DigitalPayMethods.BLOCK
+        self._requestKeyValuePair[constants.PaytureParams.Method] = (
+            constants.DigitalPayMethods.PAY
+            if Command == constants.PaytureCommands.Pay  # noqa:F821
+            else constants.DigitalPayMethods.BLOCK
+        )
         self._expandMerchant()
-        if (self._specialCommand == constants.PaytureCommands.AndroidPay and amount != None):
+        if (
+            self._specialCommand == constants.PaytureCommands.AndroidPay
+            and amount is not None
+        ):
             self._requestKeyValuePair[constants.PaytureParams.Amount] = amount
         self.Command = self._specialCommand
         self._expanded = True

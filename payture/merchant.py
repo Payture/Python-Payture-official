@@ -1,8 +1,8 @@
 from payture import api
+from payture import constants
 from payture import digitalwallet
 from payture import ewallet
 from payture import inpay
-from payture import constants
 
 
 class Merchant(object):
@@ -28,8 +28,12 @@ class Merchant(object):
 
     def apple(self, command):
         """Create an empty transation for Payture Apple Pay."""
-        return digitalwallet.TransactionDigitalWallet(command, self, constants.PaytureCommands.ApplePay)
+        return digitalwallet.TransactionDigitalWallet(
+            command, self, constants.PaytureCommands.ApplePay
+        )
 
     def android(self, command):
         """Create an empty transation for Payture Android Pay."""
-        return digitalwallet.TransactionDigitalWallet(command, self, constants.PaytureCommands.AndroidPay)
+        return digitalwallet.TransactionDigitalWallet(
+            command, self, constants.PaytureCommands.AndroidPay
+        )

@@ -6,9 +6,9 @@ class EncodeString(object):
         listattrs = dir(self)
         result = ""
         for elem in listattrs:
-            if(elem.startswith('_') or elem.endswith('_')):
+            if elem.startswith("_") or elem.endswith("_"):
                 continue
-            result += elem + '=' + str(getattr(self, elem)) + ';'
+            result += elem + "=" + str(getattr(self, elem)) + ";"
         return result
 
 
@@ -25,7 +25,7 @@ class PayInfo(EncodeString):
 
 
 class Card(EncodeString):
-    def __init__(self, cardNum, eMonth, eYear, cardHolder, secureCode, cardId = None ):
+    def __init__(self, cardNum, eMonth, eYear, cardHolder, secureCode, cardId=None):
         self.CardNumber = cardNum
         self.EMonth = eMonth
         self.EYear = eYear
@@ -43,27 +43,28 @@ class Customer(EncodeString):
         self.Email = email
         super(Customer, self).__init__()
 
+
 class Data(EncodeString):
     def __init__(self, sessionType, ip, **kwargs):
         self.SessionType = sessionType
         self.IP = ip
         for key, value in kwargs.items():
-            if(key == 'OrderId'):
+            if key == "OrderId":
                 self.OrderId = value
-            elif(key == 'Amount'):
+            elif key == "Amount":
                 self.Amount = value
-            elif(key == 'Language'):
+            elif key == "Language":
                 self.Language = value
-            elif(key == 'TemplateTag'):
+            elif key == "TemplateTag":
                 self.TemplateTag = value
-            elif(key == 'Url'):
+            elif key == "Url":
                 self.Url = value
-            elif(key == 'Product'):
+            elif key == "Product":
                 self.Product = value
-            elif(key == 'Total'):
+            elif key == "Total":
                 self.Total = value
-            elif(key == 'ConfirmCode'):
+            elif key == "ConfirmCode":
                 self.ConfirmCode = value
-            elif(key == 'CustomFields'):
+            elif key == "CustomFields":
                 self.CustomFields = value
         super(Data, self).__init__()
