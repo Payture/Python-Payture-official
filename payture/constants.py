@@ -27,75 +27,70 @@ class PaytureCommands(object):
         pass
 
 
-
-
-
 class PaytureParams(object):
-	VWUserLgn = 'VWUserLgn'
-	VWUserPsw = 'VWUserPsw'
-	CardId = 'CardId'
-	IP = 'IP'
-	DATA = 'DATA'
-	Key = 'Key'
-	PayInfo = 'PayInfo'
-	VWID = 'VWID'
-	Amount = 'Amount'
-	SessionId = 'SessionId'
-	CardNumber = 'CardNumber'
-	EMonth = 'EMonth'
-	EYear = 'EYear'
-	CardHolder = 'CardHolder'
-	SecureCode = 'SecureCode'
-	PhoneNumber = 'PhoneNumber'
-	Password = 'Password'
-	Email = 'Email'
-	OrderId = 'OrderId'
-	SessionType = 'SessionType'
-	Data = 'Data'
-	PAN = 'PAN'
-	CustomerKey = 'CustomerKey'
-	PaytureId = 'PaytureId'
-	CustomFields = 'CustomFields'
-	Description = 'Description'
-	PaRes = 'PaRes'
-	MD = 'MD'
-	PayToken = 'PayToken'
-	Method = 'Method'
-	TemplateTag = 'TemplateTag'
-	Language = 'Language'
-	Product = 'Product'
-	Total = 'Total'
-	Url = 'Url'
-	Unknown = 'Unknown'
+    VWUserLgn = 'VWUserLgn'
+    VWUserPsw = 'VWUserPsw'
+    CardId = 'CardId'
+    IP = 'IP'
+    DATA = 'DATA'
+    Key = 'Key'
+    PayInfo = 'PayInfo'
+    VWID = 'VWID'
+    Amount = 'Amount'
+    SessionId = 'SessionId'
+    CardNumber = 'CardNumber'
+    EMonth = 'EMonth'
+    EYear = 'EYear'
+    CardHolder = 'CardHolder'
+    SecureCode = 'SecureCode'
+    PhoneNumber = 'PhoneNumber'
+    Password = 'Password'
+    Email = 'Email'
+    OrderId = 'OrderId'
+    SessionType = 'SessionType'
+    Data = 'Data'
+    PAN = 'PAN'
+    CustomerKey = 'CustomerKey'
+    PaytureId = 'PaytureId'
+    CustomFields = 'CustomFields'
+    Description = 'Description'
+    PaRes = 'PaRes'
+    MD = 'MD'
+    PayToken = 'PayToken'
+    Method = 'Method'
+    TemplateTag = 'TemplateTag'
+    Language = 'Language'
+    Product = 'Product'
+    Total = 'Total'
+    Url = 'Url'
+    Unknown = 'Unknown'
 
-	def __setattr__(self, *_):
-		pass
+    def __setattr__(self, *_):
+        pass
 
 
 class PaytureAPIType(object):
-	api = 'api'
-	apim = 'apim'
-	vwapi = 'vwapi'
+    api = 'api'
+    apim = 'apim'
+    vwapi = 'vwapi'
 
-	def __setattr__(self, *_):
-		pass
-
-
+    def __setattr__(self, *_):
+        pass
 
 
 class DigitalPayMethods(object):
-	PAY = 'PAY'
-	BLOCK = 'BLOCK'
+    PAY = 'PAY'
+    BLOCK = 'BLOCK'
 
-	def __setattr__(self, *_):
-		pass
+    def __setattr__(self, *_):
+        pass
+
 
 class SessionType(object):
-	Add = 'Add'
-	Pay = 'Pay'
-	Block = 'Block'
-	Unknown = 'Unknown'
+    Add = 'Add'
+    Pay = 'Pay'
+    Block = 'Block'
+    Unknown = 'Unknown'
 
-	def __setattr__(self, *_):
-		pass
-
+    def __setattr__(self, *_):
+        pass

@@ -13,7 +13,6 @@ class EncodeString(object):
 
 
 class PayInfo(EncodeString):
-
     def __init__(self, pan, emonth, eyear, cardHolder, secureCode, orderId, amount):
         self.PAN = pan
         self.EMonth = emonth
@@ -68,5 +67,3 @@ class Data(EncodeString):
             elif(key == 'CustomFields'):
                 self.CustomFields = value
         super(Data, self).__init__()
-
-
