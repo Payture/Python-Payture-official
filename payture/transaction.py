@@ -1,7 +1,7 @@
-from . import constants
+from payture import constants
 import requests
 import xml.etree.ElementTree as ET
-from . import paytureresponse 
+from payture import paytureresponse
 
 class RequestClient(object):
     """Base class for posting request to Payture server"""

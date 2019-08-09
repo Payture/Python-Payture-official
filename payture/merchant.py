@@ -1,8 +1,8 @@
-from . import api
-from . import digitalwallet
-from . import ewallet
-from . import inpay
-from . import constants
+from payture import api
+from payture import digitalwallet
+from payture import ewallet
+from payture import inpay
+from payture import constants
 
 
 class Merchant(object):

@@ -1,5 +1,5 @@
-from . import transaction
-from . import constants
+from payture import transaction
+from payture import constants
 
 class TransactionDigitalWallet(transaction.Transaction):
     """Transaction class for Payture ApplePay and Payture AndroidPay"""

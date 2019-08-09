@@ -1,6 +1,6 @@
-from . import transaction
+from payture import transaction
 from collections import *
-from . import constants
+from payture import constants
 
 class TransactionAPI(transaction.Transaction):
    """Transaction class for PaytureAPI"""
