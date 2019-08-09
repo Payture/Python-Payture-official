@@ -41,7 +41,7 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=['payture'], #find_packages(exclude=['contrib', 'docs', 'tests']),
-    package_dir={'payture': 'payturetypes'},
+    package_dir={'payture': 'payture'},
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['requests'],
