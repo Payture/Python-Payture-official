@@ -1,0 +1,8 @@
+[flake8]
+max-line-length = 80
+max-complexity = 18
+select = B,C,E,F,W,T4,B9
+extend-ignore = E501,E203
+per-file-ignores =
+    zvooq/web/wroutes.py:F401
+exclude = alembic/*
