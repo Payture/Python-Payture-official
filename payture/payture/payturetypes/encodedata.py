@@ -39,7 +39,7 @@ class Card(EncodeString):
 
 
 class Customer(EncodeString):
-    def __init__(self, login, password, phone=None, email=None):
+    def __init__(self, login, password, phone='', email=''):
         self.VWUserLgn = login
         self.VWUserPsw = password
         self.PhoneNumber = phone
