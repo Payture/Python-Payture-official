@@ -50,7 +50,7 @@ class Data(EncodeString):
     def __init__(self, sessionType, ip, **kwargs):
         self.SessionType = sessionType
         self.IP = ip
-        for key, value in kwargs['kwargs'].items():
+        for key, value in kwargs.items():
             if(key == 'OrderId'):
                 self.OrderId = value
             elif(key == 'Amount'):
